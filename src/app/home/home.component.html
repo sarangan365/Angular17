@@ -1,10 +1,20 @@
 <section>
    <form>
-      <input type="text" placeholder="Filter by name or city" #filter>
+      <input type="text" placeholder="Filter by name or city" #filter (input)="onInputChange(filter.value)">
       <button class="primary" type="button" (click)="filterResults(filter.value)">Search</button>
    </form>
 </section>
+<section>
+   <div *ngFor="let city of filterCities">
+      <input type="checkbox" [checked]="selectedCities.has(city)" (change)="toggleCityFilter(city)"> {{ city }}
+   </div>
+</section>
 <section class="results">
-   <app-housing-location *ngFor="let housingLocation of filteredLocationList" [housingLocation]="housingLocation">
-   </app-housing-location>
+   <ng-container *ngIf="filteredLocationList.length > 0; else noData">
+      <app-housing-location *ngFor="let housingLocation of filteredLocationList" [housingLocation]="housingLocation">
+      </app-housing-location>
+   </ng-container>
+   <ng-template #noData>
+      <p>No result found</p>
+   </ng-template>
 </section>
